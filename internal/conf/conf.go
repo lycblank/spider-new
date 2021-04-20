@@ -10,6 +10,11 @@ import (
 
 type Config struct {
 	FlyBook FlyBookConfig `yaml:"flybook"`
+	Chanify ChanifyConfig `yaml:"chanify"`
+}
+
+type ChanifyConfig struct {
+	Webhook string `yaml:"webhook"`
 }
 
 type FlyBookConfig struct {

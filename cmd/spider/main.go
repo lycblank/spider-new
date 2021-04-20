@@ -1,16 +1,37 @@
 package main
 
 import (
+	"context"
 	"github.com/lycblank/spider-new/internal/conf"
+	"github.com/lycblank/spider-new/internal/github"
 	"github.com/lycblank/spider-new/internal/iciba"
+	"github.com/lycblank/spider-new/pkg/chanify"
 	"github.com/lycblank/spider-new/pkg/flybook"
+	"github.com/lycblank/spider-new/pkg/notify"
 )
 
 func main() {
-	fb := flybook.NewFlyBook(conf.GetConfig().FlyBook.Webhook)
-	iciba.Init(fb)
+	ic := &NotifyContainer{}
+	ic.AddNotify(flybook.NewFlyBook(conf.GetConfig().FlyBook.Webhook))
+	ic.AddNotify(chanify.NewChanify(conf.GetConfig().Chanify.Webhook))
+	iciba.Init(ic)
+	github.Init(ic)
 	select {}
 }
 
+type NotifyContainer struct {
+	ns []notify.Notify
+}
+
+func (ic *NotifyContainer) AddNotify(n notify.Notify) {
+	ic.ns = append(ic.ns, n)
+}
+
+func (ic *NotifyContainer) Send(ctx context.Context, arg notify.NotifyArg) error {
+	for _, n := range ic.ns {
+		n.Send(ctx, arg)
+	}
+	return nil
+}
 
 

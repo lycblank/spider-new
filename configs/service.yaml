@@ -1,2 +1,5 @@
 flybook:
-  webhook: xxxxx
+  webhook: xxxx
+
+chanify:
+  webhook: xxxx

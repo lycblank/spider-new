@@ -1,44 +1,34 @@
 package flybook
 
 import (
-	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/lycblank/spider-new/pkg/notify"
 	"github.com/parnurzeal/gorequest"
 )
 
-type FlyBookArg struct {
-	Title    string
-	Contents []string
-}
 
 type FlyBook struct {
-	ch       chan FlyBookArg
+	ch       chan notify.NotifyArg
 	webhook  string
 }
 
 func NewFlyBook(webhook string) *FlyBook {
 	fb := &FlyBook{
-		ch:       make(chan FlyBookArg, 512),
+		ch:       make(chan notify.NotifyArg, 512),
 		webhook:  webhook,
 	}
 	go fb.process()
 	return fb
 }
 
-
-
-func (fb *FlyBook) Write(p []byte) (n int, err error) {
-	datas := bytes.Split(p, []byte("\n"))
-	if len(datas) > 0 {
-		contents := make([]string, 0, len(datas) - 1)
-		for i ,cnt := 1, len(datas);i<cnt;i++{
-			contents = append(contents, string(datas[i]))
-		}
-		fb.Alert(string(datas[0]), contents...)
+func (fb *FlyBook) Send(ctx context.Context, arg notify.NotifyArg) error {
+	select {
+	case fb.ch <- arg:
+	default:
 	}
-
-	return len(p), nil
+	return nil
 }
 
 
@@ -47,7 +37,7 @@ func (fb *FlyBook) Alert(title string, contents ...string) {
 		contents = append(contents, title)
 	}
 	select {
-	case fb.ch <- FlyBookArg{Title: title, Contents: contents}:
+	case fb.ch <- notify.NotifyArg{Title: title, Contents: contents}:
 	default:
 	}
 }
@@ -58,7 +48,7 @@ func (fb *FlyBook) process() {
 	}
 }
 
-func (fb *FlyBook) sendMsg(arg FlyBookArg) {
+func (fb *FlyBook) sendMsg(arg notify.NotifyArg) {
 	resp, _, errs := gorequest.New().Post(fb.webhook).
 		Set(`Content-Type`, `application/json`).
 		SendString(string(fb.buildBody(arg))).End()
@@ -75,7 +65,7 @@ type FlyBookMsgCell struct {
 	Text string `json:"text"`
 }
 
-func (fb *FlyBook) buildBody(arg FlyBookArg) []byte {
+func (fb *FlyBook) buildBody(arg notify.NotifyArg) []byte {
 	title := arg.Title
 	lines := make([][]FlyBookMsgCell, 0, len(arg.Contents))
 	for i, cnt := 0, len(arg.Contents); i < cnt; i++ {

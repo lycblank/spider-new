@@ -4,27 +4,27 @@ package iciba
 import (
 	"context"
 	"fmt"
-	"io"
-	"github.com/jasonlvhit/gocron"
-	"github.com/chromedp/chromedp"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/chromedp/chromedp"
+	"github.com/jasonlvhit/gocron"
+	"github.com/lycblank/spider-new/pkg/notify"
 	"log"
 	"strings"
 )
 
 var targetUrl string = `http://news.iciba.com/`
-var writer io.Writer
-func Init(w io.Writer) {
-	writer = w
+var defaultNotify notify.Notify
+func Init(n notify.Notify) {
+	defaultNotify = n
 
-	GetEnginishAndChinese(w)
+	GetEnginishAndChinese(n)
 
 	s := gocron.NewScheduler()
-	s.Every(1).Day().At("09:00").Do(GetEnginishAndChinese, writer)
+	s.Every(1).Day().At("09:00").Do(GetEnginishAndChinese, n)
 	s.Start()
 }
 
-func GetEnginishAndChinese(w io.Writer) {
+func GetEnginishAndChinese(n notify.Notify) {
 	htmlContent := getHtmlContent()
 	if htmlContent == "" {
 		return
@@ -41,8 +41,11 @@ func GetEnginishAndChinese(w io.Writer) {
 		chinese = s.Text()
 	}
 
-	content := fmt.Sprintf("%s\n%s\n%s", "每日一句", enginish, chinese)
-	io.WriteString(w, content)
+	arg := notify.NotifyArg{
+		Title:"每日一句",
+		Contents: []string{enginish, chinese},
+	}
+	n.Send(context.Background(), arg)
 }
 
 func getHtmlContent() string {
