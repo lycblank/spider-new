@@ -4,10 +4,12 @@ import (
 	"context"
 	"github.com/lycblank/spider-new/internal/conf"
 	"github.com/lycblank/spider-new/internal/github"
+	"github.com/lycblank/spider-new/internal/gonews"
 	"github.com/lycblank/spider-new/internal/iciba"
 	"github.com/lycblank/spider-new/pkg/chanify"
 	"github.com/lycblank/spider-new/pkg/flybook"
 	"github.com/lycblank/spider-new/pkg/notify"
+	"time"
 )
 
 func main() {
@@ -15,7 +17,10 @@ func main() {
 	ic.AddNotify(flybook.NewFlyBook(conf.GetConfig().FlyBook.Webhook))
 	ic.AddNotify(chanify.NewChanify(conf.GetConfig().Chanify.Webhook))
 	iciba.Init(ic)
+	time.Sleep(10*time.Second)
 	github.Init(ic)
+	time.Sleep(10*time.Second)
+	gonews.Init(ic)
 	select {}
 }
 
