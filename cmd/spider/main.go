@@ -6,6 +6,7 @@ import (
 	"github.com/lycblank/spider-new/internal/github"
 	"github.com/lycblank/spider-new/internal/gonews"
 	"github.com/lycblank/spider-new/internal/iciba"
+	"github.com/lycblank/spider-new/internal/leetcode"
 	"github.com/lycblank/spider-new/pkg/chanify"
 	"github.com/lycblank/spider-new/pkg/flybook"
 	"github.com/lycblank/spider-new/pkg/notify"
@@ -21,6 +22,8 @@ func main() {
 	github.Init(ic)
 	time.Sleep(10*time.Second)
 	gonews.Init(ic)
+	time.Sleep(10*time.Second)
+	leetcode.Init(ic)
 	select {}
 }
 

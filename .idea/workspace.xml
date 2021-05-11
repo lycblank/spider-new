@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d19a8bdf-1f7f-40ec-b572-96224fddf272" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/gonews/gonews.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/leetcode/leetcode.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/spider/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/spider/main.go" afterDir="false" />
     </list>
@@ -56,6 +56,28 @@
       <recent name="$PROJECT_DIR$/internal" />
       <recent name="$PROJECT_DIR$/pkg" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="go build github.com/lycblank/spider-new/cmd/spider" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
+      <module name="spider-new" />
+      <working_directory value="$PROJECT_DIR$/cmd/spider" />
+      <go_parameters value="-i" />
+      <EXTENSION ID="net.ashald.envfile">
+        <option name="IS_ENABLED" value="false" />
+        <option name="IS_SUBST" value="false" />
+        <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+        <option name="IS_IGNORE_MISSING_FILES" value="false" />
+        <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+        <ENTRIES>
+          <ENTRY IS_ENABLED="true" PARSER="runconfig" />
+        </ENTRIES>
+      </EXTENSION>
+      <kind value="DIRECTORY" />
+      <filePath value="$PROJECT_DIR$" />
+      <package value="github.com/lycblank/spider-new" />
+      <directory value="$PROJECT_DIR$/cmd/spider" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
