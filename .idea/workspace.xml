@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d19a8bdf-1f7f-40ec-b572-96224fddf272" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/internal/leetcode/leetcode.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/toutiao/toutiao.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmd/spider/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/spider/main.go" afterDir="false" />
     </list>
