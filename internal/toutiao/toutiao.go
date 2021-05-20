@@ -16,10 +16,8 @@ var defaultNotify notify.Notify
 func Init(n notify.Notify) {
 	defaultNotify = n
 
-	GetDailyToutiao(n)
-
 	s := gocron.NewScheduler()
-	s.Every(1).Day().At("09:25").Do(GetDailyToutiao, n)
+	s.Every(1).Day().At("19:00").Do(GetDailyToutiao, n)
 	s.Start()
 }
 
@@ -46,7 +44,7 @@ func GetDailyToutiao(n notify.Notify) {
 	contents := make([]string, 0, 16)
 	doc.Find("div.content > h3 > a").Each(func(_ int, s *goquery.Selection){
 		url := targetUrl + s.AttrOr("href", "")
-		title := s.AttrOr("title", "")
+		title := s.Text()
 		contents = append(contents, fmt.Sprintf("%s[%s]", title, url))
 	})
 

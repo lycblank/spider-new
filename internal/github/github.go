@@ -12,8 +12,6 @@ import (
 var defaultNotify notify.Notify
 func Init(n notify.Notify) {
 	defaultNotify = n
-	Search(n)
-
 	s := gocron.NewScheduler()
 	s.Every(1).Day().At("09:05").Do(Search, n)
 	s.Start()

@@ -15,9 +15,6 @@ var targetUrl string = `https://leetcode-cn.com/problemset/all/`
 var defaultNotify notify.Notify
 func Init(n notify.Notify) {
 	defaultNotify = n
-
-	GetPerDayProblem(n)
-
 	s := gocron.NewScheduler()
 	s.Every(1).Day().At("09:20").Do(GetPerDayProblem, n)
 	s.Start()

@@ -15,8 +15,6 @@ var listAddr = `/topics/node18`
 var defaultNotify notify.Notify
 func Init(n notify.Notify) {
 	defaultNotify = n
-	Fetch(n)
-
 	s := gocron.NewScheduler()
 	s.Every(1).Day().At("09:10").Do(Fetch, n)
 	s.Start()

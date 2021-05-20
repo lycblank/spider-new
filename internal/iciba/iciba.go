@@ -17,8 +17,6 @@ var defaultNotify notify.Notify
 func Init(n notify.Notify) {
 	defaultNotify = n
 
-	GetEnginishAndChinese(n)
-
 	s := gocron.NewScheduler()
 	s.Every(1).Day().At("09:00").Do(GetEnginishAndChinese, n)
 	s.Start()
