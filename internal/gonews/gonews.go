@@ -16,7 +16,7 @@ var defaultNotify notify.Notify
 func Init(n notify.Notify) {
 	defaultNotify = n
 	s := gocron.NewScheduler()
-	s.Every(1).Day().At("09:10").Do(Fetch, n)
+	s.Every(1).Day().At("09:30").Do(Fetch, n)
 	s.Start()
 }
 

@@ -3,3 +3,8 @@ flybook:
 
 chanify:
   webhook: xxxx
+
+pushplus:
+  webhook: xxxx
+  group: xxxx
+  token: xxxx

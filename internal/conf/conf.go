@@ -11,6 +11,7 @@ import (
 type Config struct {
 	FlyBook FlyBookConfig `yaml:"flybook"`
 	Chanify ChanifyConfig `yaml:"chanify"`
+	PushPlus PushPlusConfig `yaml:"pushplus"`
 }
 
 type ChanifyConfig struct {
@@ -19,6 +20,12 @@ type ChanifyConfig struct {
 
 type FlyBookConfig struct {
 	Webhook string `yaml:"webhook"`
+}
+
+type PushPlusConfig struct {
+	Webhook string  `yaml:"webhook"`
+	Group string    `yaml:"group"`
+	Token string    `yaml:"token"`
 }
 
 var config *Config

@@ -11,13 +11,16 @@ import (
 	"github.com/lycblank/spider-new/pkg/chanify"
 	"github.com/lycblank/spider-new/pkg/flybook"
 	"github.com/lycblank/spider-new/pkg/notify"
+	"github.com/lycblank/spider-new/pkg/pushplus"
 	"time"
 )
 
 func main() {
+	config := conf.GetConfig()
 	ic := &NotifyContainer{}
-	ic.AddNotify(flybook.NewFlyBook(conf.GetConfig().FlyBook.Webhook))
-	ic.AddNotify(chanify.NewChanify(conf.GetConfig().Chanify.Webhook))
+	ic.AddNotify(flybook.NewFlyBook(config.FlyBook.Webhook))
+	ic.AddNotify(chanify.NewChanify(config.Chanify.Webhook))
+	ic.AddNotify(pushplus.NewPushPlus(config.PushPlus.Webhook, config.PushPlus.Group, config.PushPlus.Token))
 	iciba.Init(ic)
 	time.Sleep(10*time.Second)
 	github.Init(ic)
