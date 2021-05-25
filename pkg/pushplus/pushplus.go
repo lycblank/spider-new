@@ -2,6 +2,7 @@ package pushplus
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/lycblank/spider-new/pkg/notify"
 	"github.com/parnurzeal/gorequest"
@@ -51,11 +52,18 @@ func (c *PushPlus) process() {
 }
 
 func (c *PushPlus) sendMsg(arg notify.NotifyArg) {
+	args := map[string]interface{}{}
+	for i := 0; i < len(arg.Contents); i++{
+		key := fmt.Sprintf("key%d", i)
+		args[key] = arg.Contents[i]
+	}
+	datas, _ := json.Marshal(args)
 	content := map[string]interface{}{
 		"token": c.token,
 		"title": arg.Title,
 		"template": "json",
 		"topic": c.topic,
+		"content":string(datas),
 	}
 	resp, _, errs := gorequest.New().Post(c.webhook).
 		Set(`Content-Type`, `application/json`).

@@ -6,5 +6,5 @@ chanify:
 
 pushplus:
   webhook: xxxx
-  group: xxxx
-  token: xxxx
+  group: xxx
+  token: xxx
