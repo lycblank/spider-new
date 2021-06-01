@@ -8,6 +8,7 @@ import (
 	"github.com/lycblank/spider-new/internal/gonews"
 	"github.com/lycblank/spider-new/internal/iciba"
 	"github.com/lycblank/spider-new/internal/leetcode"
+	"github.com/lycblank/spider-new/internal/shequ"
 	"github.com/lycblank/spider-new/internal/toutiao"
 	"github.com/lycblank/spider-new/pkg/chanify"
 	"github.com/lycblank/spider-new/pkg/flybook"
@@ -26,6 +27,7 @@ func main() {
 	gonews.Init(ic)
 	leetcode.Init(ic)
 	toutiao.Init(ic)
+	shequ.Init(ic)
 	cnblogs.Init(ic)
 	select {}
 }
