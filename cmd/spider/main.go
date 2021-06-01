@@ -7,6 +7,7 @@ import (
 	"github.com/lycblank/spider-new/internal/gonews"
 	"github.com/lycblank/spider-new/internal/iciba"
 	"github.com/lycblank/spider-new/internal/leetcode"
+	"github.com/lycblank/spider-new/internal/shequ"
 	"github.com/lycblank/spider-new/internal/toutiao"
 	"github.com/lycblank/spider-new/pkg/chanify"
 	"github.com/lycblank/spider-new/pkg/flybook"
@@ -30,6 +31,8 @@ func main() {
 	leetcode.Init(ic)
 	time.Sleep(10*time.Second)
 	toutiao.Init(ic)
+	time.Sleep(10*time.Second)
+	shequ.Init(ic)
 	select {}
 }
 
