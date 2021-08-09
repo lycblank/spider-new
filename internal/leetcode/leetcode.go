@@ -32,36 +32,40 @@ func GetPerDayProblem(n notify.Notify) {
 		return
 	}
 
-	var title, href, seq, solution, correctate, level string
-	doc.Find(".question-title").EachWithBreak(func(_ int, s *goquery.Selection)bool{
-		s = s.Find("a")
-		title = s.Text()
-		href = fmt.Sprintf("%s%s", "https://leetcode-cn.com", s.AttrOr("href", ""))
-		return false
-	})
-
-	doc.Find("tbody tr td").EachWithBreak(func(i int, s *goquery.Selection)bool{
+	var title, href, solution, correctate, level string
+	doc.Find("tbody tr").EachWithBreak(func(i int, s *goquery.Selection)bool{
 		if i == 1 {
-			seq = s.Text()
-		}
-		if i == 3 {
-			solution = s.Text()
-		}
-		if i == 4 {
-			correctate = s.Text()
-		}
-		if i == 5 {
-			level = s.Text()
+			s.Find("td").EachWithBreak(func(k int, s *goquery.Selection) bool {
+				if k == 1 {
+					t := s.Find("a")
+					title = t.Text()
+					href = fmt.Sprintf("%s%s", "https://leetcode-cn.com", t.AttrOr("href", ""))
+				}
+				if k == 2 {
+					t := s.Find("a")
+					solution = t.Text()
+				}
+				if k == 3 {
+					t := s.Find("span")
+					correctate = t.Text()
+				}
+				if k == 4 {
+					t := s.Find("span")
+					level = t.Text()
+					return false
+				}
+				return true
+			})
 			return false
 		}
 		return true
 	})
-
+	strs := strings.Fields(title)
 	arg := notify.NotifyArg{
 		Title:"每日一题",
 		Contents: []string{
-			"序号: " + seq,
-			"标题: " + title,
+			"序号: " + strs[0][:len(strs[0])-1],
+			"标题: " + strs[1],
 			"链接: " + href,
 			"题解: " + solution,
 			"通过率:" + correctate,
@@ -78,8 +82,8 @@ func getHtmlContent() string {
 	var str string
 	err := chromedp.Run(ctx,
 		chromedp.Navigate(targetUrl),
-		chromedp.WaitVisible(`#question-app > div > div:nth-child(2) > div.question-list-base > div.table-responsive.question-list-table > table`),
-		chromedp.OuterHTML(`#question-app > div > div:nth-child(2) > div.question-list-base > div.table-responsive.question-list-table > table`, &str),
+		chromedp.WaitVisible(`#__next > div > div > div.grid.grid-cols-4.md\:grid-cols-3.lg\:grid-cols-4.gap-4.lg\:gap-6 > div.col-span-4.md\:col-span-2.lg\:col-span-3 > div.jsx-3812067982 > div.ant-table-wrapper.question-table.-mx-4.md\:mx-0 > div > div > div > div > div > table`),
+		chromedp.OuterHTML(`#__next > div > div > div.grid.grid-cols-4.md\:grid-cols-3.lg\:grid-cols-4.gap-4.lg\:gap-6 > div.col-span-4.md\:col-span-2.lg\:col-span-3 > div.jsx-3812067982 > div.ant-table-wrapper.question-table.-mx-4.md\:mx-0 > div > div > div > div > div > table`, &str),
 	)
 	if err != nil {
 		fmt.Println(err)

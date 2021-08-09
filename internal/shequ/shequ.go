@@ -17,9 +17,8 @@ var defaultNotify notify.Notify
 func Init(n notify.Notify) {
 	defaultNotify = n
 
-	GetDailyShequ(n)
 	s := gocron.NewScheduler()
-	s.Every(1).Day().At("9:10").Do(GetDailyShequ, n)
+	s.Every(1).Day().At("19:20").Do(GetDailyShequ, n)
 	s.Start()
 }
 
