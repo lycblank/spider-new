@@ -1,17 +1,23 @@
 package conf
 
 import (
-	"sync"
+	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
-	"fmt"
+	"sync"
 )
 
 type Config struct {
 	FlyBook FlyBookConfig `yaml:"flybook"`
 	Chanify ChanifyConfig `yaml:"chanify"`
 	PushPlus PushPlusConfig `yaml:"pushplus"`
+	DingDing DingDingConfig `yaml:"dingding"`
+}
+
+type DingDingConfig struct {
+	Webhook string `yaml:"webhook"`
+	Secret string `yaml:"secret"`
 }
 
 type ChanifyConfig struct {

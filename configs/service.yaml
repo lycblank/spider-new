@@ -8,3 +8,7 @@ pushplus:
   webhook: xxxx
   group: xxx
   token: xxx
+
+dingding:
+  webhook: "https://oapi.dingtalk.com/robot/send?access_token=94d1fc69e50a79b36b53a605a68a6ba36fa4b72030b66a8d3ce9716865e8efef"
+  secret: "SEC363afb6f8be25f27db8da583bce3331ac090205e62b8aa66d1cdfd4d5690ae72"

@@ -33,7 +33,7 @@ func Search(n notify.Notify) {
 		Contents: make([]string, 0, 10),
 	}
 	for _, result := range ret.Repositories {
-		arg.Contents = append(arg.Contents, fmt.Sprintf("%s[%s]", result.GetFullName(),
+		arg.Contents = append(arg.Contents, fmt.Sprintf("[%s](%s)", result.GetFullName(),
 			result.GetSVNURL()))
 	}
 	n.Send(context.Background(), arg)

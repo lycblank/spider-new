@@ -38,7 +38,7 @@ func GetDailyCNBlogs(n notify.Notify) {
 	doc.Find(".post-item-title").Each(func(_ int, s *goquery.Selection) {
 		url := s.AttrOr("href", "")
 		title := s.Text()
-		contents = append(contents, fmt.Sprintf("%s[%s]", title, url))
+		contents = append(contents, fmt.Sprintf("[%s](%s)", title, url))
 	})
 
 	arg := notify.NotifyArg{
