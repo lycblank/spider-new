@@ -22,11 +22,11 @@ func Init(n notify.Notify) {
 	s := gocron.NewScheduler()
 	s.Every(1).Day().At("09:30").Do(Fetch, n)
 	s.Start()
+	Fetch(n)
 }
 
 func Fetch(n notify.Notify) {
 	body := getHtmlFetch()
-	fmt.Println("body = ", body)
 	doc, err := goquery.NewDocumentFromReader(bytes.NewBufferString(body))
 	if err != nil {
 		fmt.Printf("new document err. err:%+v\n", err)
@@ -39,6 +39,7 @@ func Fetch(n notify.Notify) {
 		fmt.Printf("attr href not exits dddd %s\n", first.Text())
 		return
 	}
+	fmt.Println(topicUrl)
 	contentUrl := fmt.Sprintf("%s%s", baseAddr, topicUrl)
 	FetchContent(contentUrl, n)
 }
@@ -50,23 +51,21 @@ func FetchContent(contentUrl string, n notify.Notify) {
 		fmt.Printf("new document err. err:%+v\n", err)
 		return
 	}
-	fmt.Println("body===", body)
+
 	// 获取标题
-	titleSel := doc.Find("h2")
-	title := titleSel.Text()
+	titleSel := doc.Find("span")
+	title := strings.Split(titleSel.Text(), "···")[0]
 	contents := make([]string, 0, 8)
 	doc.Find("ol li").Each(func(i int, s *goquery.Selection) {
 		content := strings.TrimSpace(strings.Split(s.Text(), "https")[0])
 		href := s.Find("a").AttrOr("href", "")
 		contents = append(contents, fmt.Sprintf("[%s](%s)", content, href))
 	})
-
+	fmt.Println("content", contents)
 	n.Send(context.Background(), notify.NotifyArg{
 		Title:    title,
 		Contents: contents,
 	})
-	fmt.Println(title)
-	fmt.Println(contents)
 }
 
 func getHtmlFetch() string {
@@ -93,7 +92,7 @@ func getHtmlFetchContent(url string) string {
 	err := chromedp.Run(ctx,
 		chromedp.Navigate(url),
 		chromedp.WaitVisible(`#root > div > section > div > main > div > div > div > div:nth-child(1) > div > div.ant-card-body > div:nth-child(3) > div > div > ol`),
-		chromedp.OuterHTML(`#root > div > section > div > main > div > div > div > div:nth-child(1) > div > div.ant-card-body > div:nth-child(3) > div > div`, &str),
+		chromedp.OuterHTML(`#root > div > section > div > main > div > div > div > div:nth-child(1) > div`, &str),
 	)
 	if err != nil {
 		fmt.Println(err)
