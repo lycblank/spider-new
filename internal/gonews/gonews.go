@@ -1,18 +1,22 @@
 package gonews
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/chromedp/chromedp"
 	"github.com/jasonlvhit/gocron"
 	"github.com/lycblank/spider-new/pkg/notify"
-	"net/http"
+	"log"
+	"strings"
 )
 
 var baseAddr = `https://gocn.vip`
-var listAddr = `/topics/node18`
+var listAddr = `/topics/cate/18?page=1&grade=hot`
 
 var defaultNotify notify.Notify
+
 func Init(n notify.Notify) {
 	defaultNotify = n
 	s := gocron.NewScheduler()
@@ -21,24 +25,15 @@ func Init(n notify.Notify) {
 }
 
 func Fetch(n notify.Notify) {
-	listUrl := fmt.Sprintf("%s%s", baseAddr, listAddr)
-	fmt.Println(listUrl)
-	httpClient := &http.Client{}
-	resp, err := httpClient.Get(listUrl)
+	body := getHtmlFetch()
+	fmt.Println("body = ", body)
+	doc, err := goquery.NewDocumentFromReader(bytes.NewBufferString(body))
 	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer resp.Body.Close()
-
-	doc, err := goquery.NewDocumentFromReader(resp.Body)
-	if err != nil {
-		fmt.Printf("new document failed. err:%+v\n", err)
+		fmt.Printf("new document err. err:%+v\n", err)
 		return
 	}
 
-	first := doc.Find(".row .topics .topic .title a")
-
+	first := doc.Find("a")
 	topicUrl, ok := first.Attr("href")
 	if !ok {
 		fmt.Printf("attr href not exits dddd %s\n", first.Text())
@@ -49,29 +44,59 @@ func Fetch(n notify.Notify) {
 }
 
 func FetchContent(contentUrl string, n notify.Notify) {
-	http := &http.Client{}
-	resp, err := http.Get(contentUrl)
-	if err != nil {
-		fmt.Printf("get %s error err:%+v\n", contentUrl, err)
-		return
-	}
-	defer resp.Body.Close()
-	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	body := getHtmlFetchContent(contentUrl)
+	doc, err := goquery.NewDocumentFromReader(bytes.NewBufferString(body))
 	if err != nil {
 		fmt.Printf("new document err. err:%+v\n", err)
 		return
 	}
-
+	fmt.Println("body===", body)
 	// 获取标题
-	titleSel := doc.Find(".row .topic-detail .title")
+	titleSel := doc.Find("h2")
 	title := titleSel.Text()
 	contents := make([]string, 0, 8)
-	doc.Find(".card-body ol li").Each(func(i int, s *goquery.Selection){
-		contents = append(contents, s.Text())
+	doc.Find("ol li").Each(func(i int, s *goquery.Selection) {
+		content := strings.TrimSpace(strings.Split(s.Text(), "https")[0])
+		href := s.Find("a").AttrOr("href", "")
+		contents = append(contents, fmt.Sprintf("[%s](%s)", content, href))
 	})
 
 	n.Send(context.Background(), notify.NotifyArg{
-		Title: title,
+		Title:    title,
 		Contents: contents,
 	})
+	fmt.Println(title)
+	fmt.Println(contents)
+}
+
+func getHtmlFetch() string {
+	ctx, cancel := chromedp.NewContext(context.Background(), chromedp.WithLogf(log.Printf))
+	defer cancel()
+
+	var str string
+	err := chromedp.Run(ctx,
+		chromedp.Navigate(fmt.Sprintf("%s%s", baseAddr, listAddr)),
+		chromedp.WaitVisible(`#root > div > section > div > main > div > div.ant-row.ant-row-center.ant-row-top > div:nth-child(1) > div > div > div.ant-spin-nested-loading > div > div > div > div.ant-spin-nested-loading > div > ul > div:nth-child(1) > div > li > div > div.ant-list-item-meta-content`),
+		chromedp.OuterHTML(`#root > div > section > div > main > div > div.ant-row.ant-row-center.ant-row-top > div:nth-child(1) > div > div > div.ant-spin-nested-loading > div > div > div > div.ant-spin-nested-loading > div > ul > div:nth-child(1) > div > li > div > div.ant-list-item-meta-content`, &str),
+	)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return str
+}
+
+func getHtmlFetchContent(url string) string {
+	ctx, cancel := chromedp.NewContext(context.Background(), chromedp.WithLogf(log.Printf))
+	defer cancel()
+
+	var str string
+	err := chromedp.Run(ctx,
+		chromedp.Navigate(url),
+		chromedp.WaitVisible(`#root > div > section > div > main > div > div > div > div:nth-child(1) > div > div.ant-card-body > div:nth-child(3) > div > div > ol`),
+		chromedp.OuterHTML(`#root > div > section > div > main > div > div > div > div:nth-child(1) > div > div.ant-card-body > div:nth-child(3) > div > div`, &str),
+	)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return str
 }

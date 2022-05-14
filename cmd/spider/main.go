@@ -11,10 +11,8 @@ import (
     "github.com/lycblank/spider-new/internal/leetcode"
     "github.com/lycblank/spider-new/internal/shequ"
     "github.com/lycblank/spider-new/internal/toutiao"
-    "github.com/lycblank/spider-new/pkg/chanify"
     "github.com/lycblank/spider-new/pkg/dingding"
     "github.com/lycblank/spider-new/pkg/notify"
-    "github.com/lycblank/spider-new/pkg/pushplus"
 )
 
 func main() {
@@ -22,8 +20,8 @@ func main() {
     ic := &NotifyContainer{}
     ic.AddNotify(dingding.NewDingDing(config.DingDing.Webhook, config.DingDing.Secret))
     //ic.AddNotify(flybook.NewFlyBook(config.FlyBook.Webhook))
-    ic.AddNotify(chanify.NewChanify(config.Chanify.Webhook))
-    ic.AddNotify(pushplus.NewPushPlus(config.PushPlus.Webhook, config.PushPlus.Group, config.PushPlus.Token))
+    //ic.AddNotify(chanify.NewChanify(config.Chanify.Webhook))
+    //ic.AddNotify(pushplus.NewPushPlus(config.PushPlus.Webhook, config.PushPlus.Group, config.PushPlus.Token))
     iciba.Init(ic)
     github.Init(ic)
     gonews.Init(ic)

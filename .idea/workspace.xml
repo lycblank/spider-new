@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d19a8bdf-1f7f-40ec-b572-96224fddf272" name="Default Changelist" comment="" />
+    <list default="true" id="d19a8bdf-1f7f-40ec-b572-96224fddf272" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/spider/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/spider/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/gonews/gonews.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gonews/gonews.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/dingding/dingding.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/dingding/dingding.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
